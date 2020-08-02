@@ -21,6 +21,17 @@ let numStorage = {
     argNum2: ""
 };
 
+// Объект для хранения результатов действий операторов
+let results = {
+    plus: "",
+};
+
+// Тут равно проверяет какой был выполнен оператор
+let id = {
+    plus: "",
+};
+
+
 // Формируем первое число до оператора (аргумент1)
 function argument1 (e) {
     let btn = e.target;
@@ -70,13 +81,27 @@ function operators (e) {
     let btn = e.target;
     if (btn && btn.classList.contains("section_item")) {
 
+        // Плюс
         if (btn.classList.contains("plus")) {
-            section[0].removeEventListener("click", argument1);
-            section[0].addEventListener("click", argument2);
+
+            if (numStorage.argNum2 !="") { // Создаем 3й аргумент как очищеный 2й, а 1й = 1й+2й 
+                numStorage.argNum1 = numStorage.argNum1 + numStorage.argNum2;
+                numStorage.arg2 = [];
+                id.plus = 1;
+            } else {
+                section[0].removeEventListener("click", argument1);
+                section[0].addEventListener("click", argument2);
+                id.plus = 1;
+            }
         }
 
+        // Равно
         if (btn.classList.contains("equate")) {
-            
+            if (id.plus !="") { // Проверяем айди оператора (был ли он выполнен)
+                results.plus = numStorage.argNum1 + numStorage.argNum2;
+                console.log(results.plus);
+                id.plus = ""; 
+            }
         }
     }
 }
