@@ -21,6 +21,7 @@ let numStorage = {
     argNum2: ""
 };
 
+
 // Объект для хранения результатов действий операторов
 let results = {
     plus: "",
@@ -43,17 +44,17 @@ function argument1 (e) {
         if (btn.classList.contains("num_1")) {
             numStorage.arg1.push(numbers.num1);
             numStorage.argNum1 = Number(numStorage.arg1.join(""));
-            console.log(numStorage.argNum1);
+            answerScreen.textContent = `${numStorage.argNum1}`;
         } 
         if (btn.classList.contains("num_2")) {
             numStorage.arg1.push(numbers.num2);
             numStorage.argNum1 = Number(numStorage.arg1.join(""));
-            console.log(numStorage.argNum1);
+            answerScreen.textContent = `${numStorage.argNum1}`;
         } 
         if (btn.classList.contains("num_3")) {
             numStorage.arg1.push(numbers.num3);
             numStorage.argNum1 = Number(numStorage.arg1.join(""));
-            console.log(numStorage.argNum1);
+            answerScreen.textContent = `${numStorage.argNum1}`;
         }
     }
 } 
@@ -67,17 +68,17 @@ function argument2 (e) {
         if (btn.classList.contains("num_1")) {
             numStorage.arg2.push(numbers.num1);
             numStorage.argNum2 = Number(numStorage.arg2.join(""));
-            console.log(numStorage.argNum2);
+            answerScreen.textContent = `${numStorage.argNum2}`;
         }
         if (btn.classList.contains("num_2")) {
             numStorage.arg2.push(numbers.num2);
             numStorage.argNum2 = Number(numStorage.arg2.join(""));
-            console.log(numStorage.argNum2);
+            answerScreen.textContent = `${numStorage.argNum2}`;
         }
         if (btn.classList.contains("num_3")) {
             numStorage.arg2.push(numbers.num3);
             numStorage.argNum2 = Number(numStorage.arg2.join(""));
-            console.log(numStorage.argNum2);
+            answerScreen.textContent = `${numStorage.argNum2}`;
         }
     }
 }
@@ -125,13 +126,13 @@ function operations (e) {
             // Плюс
             if (id.plus !="") { // Проверяем айди оператора (был ли он выполнен)
                 results.plus = numStorage.argNum1 + numStorage.argNum2;
-                console.log(results.plus);
+                answerScreen.textContent = `${results.plus}`;
             }
 
             // Умножение
             if (id.multiply !="") { 
                 results.multiply = numStorage.argNum1 * numStorage.argNum2;
-                console.log(results.multiply); 
+                answerScreen.textContent = `${results.multiply}`;
             }
         }
     }
