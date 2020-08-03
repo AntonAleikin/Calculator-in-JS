@@ -1,6 +1,8 @@
+$background: #1C1C1C
 $white_color: white
-$grey_color: grey
-$orange_color: orange
+$grey_color: #505050
+$light_grey: rgba(255, 255, 255, 0.6)
+$orange_color: #FF9500
 
 =flex_center
     display: flex
@@ -9,10 +11,11 @@ $orange_color: orange
 
 
 .calculator
+    padding: 7px 0 7px 0
     min-height: 300px
-    background-color: black
+    background-color: $background
     border-radius: 5%
-
+    
     .answer_screen
         min-height: 150px
         color: $white_color
@@ -20,19 +23,40 @@ $orange_color: orange
         font-weight: bold
 
     .section
-        min-height: 75px
-        display: flex
-        justify-content: space-around
+        padding-right: 20px
+        width: 100%
 
         .section_item
             width: 50px
             height: 50px
+            margin-bottom: 7px
             +flex_center
             font-weight: bold
             color: $white_color
             background-color: $grey_color
             border-radius: 100%
             cursor: pointer
+            &:active
+                background-color: rgba(212, 212, 210, 0.7)
+                transition: all 0.7s ease-out 
+        .num_0
+            width: 100px
+            height: 50px
+            border-radius: 25px
+            padding-left: 25px
+            display: flex
+            justify-content: start
+
+        .light_grey
+            color: $background
+            background-color: $light_grey
+            &:active
+                background-color: rgba(255, 255, 255, 0.8)
+            
         .operator
             background-color: $orange_color
+            &:active
+                transition: none
+                color: $orange_color
+                background-color: rgba(255, 255, 255, 1)
             

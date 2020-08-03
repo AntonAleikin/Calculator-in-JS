@@ -2,16 +2,9 @@
 
 // Экран для ответов
 const answerScreen = document.querySelector(".answer_screen"),
-// Секция с кнопками для делигирования (псевдо) 
-section = document.querySelectorAll(".section");
+// Секция с кнопками для делигирования 
+section = document.querySelector(".section");
 
-
-// Записываем кнопки в объект и приписываем им цифровые значения 
-const numbers = {
-    num1: 1,
-    num2: 2,
-    num3: 3
-};
 
 // Создаем объект для хранения числовых значений ввода (аргументов)
 let numStorage = {
@@ -25,13 +18,19 @@ let numStorage = {
 // Объект для хранения результатов действий операторов
 let results = {
     plus: "",
-    multiply: ""
+    minus: "",
+    multiply: "",
+    devide: "",
+    percent: ""
 };
 
 // Тут равно проверяет какой был выполнен оператор
 let id = {
     plus: "",
-    multiply: ""
+    minus: "",
+    multiply: "",
+    devide: "",
+    percent: ""
 };
 
 
@@ -40,21 +39,13 @@ function argument1 (e) {
     let btn = e.target;
     if (btn && btn.classList.contains("section_item")) {
 
-        // Секция ЧИСЕЛ
-        if (btn.classList.contains("num_1")) {
-            numStorage.arg1.push(numbers.num1);
-            numStorage.argNum1 = Number(numStorage.arg1.join(""));
-            answerScreen.textContent = `${numStorage.argNum1}`;
-        } 
-        if (btn.classList.contains("num_2")) {
-            numStorage.arg1.push(numbers.num2);
-            numStorage.argNum1 = Number(numStorage.arg1.join(""));
-            answerScreen.textContent = `${numStorage.argNum1}`;
-        } 
-        if (btn.classList.contains("num_3")) {
-            numStorage.arg1.push(numbers.num3);
-            numStorage.argNum1 = Number(numStorage.arg1.join(""));
-            answerScreen.textContent = `${numStorage.argNum1}`;
+        // Назначаем цифровое значение кнопок от 0 до 9 с помощью цикла 
+        for (let i = 0; i < 10; i++) {
+            if (btn.classList.contains(`num_${i}`)) {
+                numStorage.arg1.push(i);
+                numStorage.argNum1 = Number(numStorage.arg1.join(""));
+                answerScreen.textContent = `${numStorage.argNum1}`;
+            } 
         }
     }
 } 
@@ -64,42 +55,39 @@ function argument2 (e) {
     let btn = e.target;
     if (btn && btn.classList.contains("section_item")) {
 
-        // Секция ЧИСЕЛ
-        if (btn.classList.contains("num_1")) {
-            numStorage.arg2.push(numbers.num1);
-            numStorage.argNum2 = Number(numStorage.arg2.join(""));
-            answerScreen.textContent = `${numStorage.argNum2}`;
-        }
-        if (btn.classList.contains("num_2")) {
-            numStorage.arg2.push(numbers.num2);
-            numStorage.argNum2 = Number(numStorage.arg2.join(""));
-            answerScreen.textContent = `${numStorage.argNum2}`;
-        }
-        if (btn.classList.contains("num_3")) {
-            numStorage.arg2.push(numbers.num3);
-            numStorage.argNum2 = Number(numStorage.arg2.join(""));
-            answerScreen.textContent = `${numStorage.argNum2}`;
+        for (let i = 0; i < 10; i++) {
+            if (btn.classList.contains(`num_${i}`)) {
+                numStorage.arg2.push(i);
+                numStorage.argNum2 = Number(numStorage.arg2.join(""));
+                answerScreen.textContent = `${numStorage.argNum2}`;
+            } 
         }
     }
 }
 
-
 // Реализация цекочки из сразу нескольких разных операций 
 function multiOperations () {
     
-    // Создаем 3й аргумент как очищеный 2й, а 1й = 1й+2й 
+    // Создаем 3й аргумент как очищеный 2й, а 1й как резалт операции 1-го и 2-го 
     if (numStorage.argNum2 !="") { 
-        if (id.plus == 1) { 
+        // Предыдущая операция:
+        if (id.plus == 1) {  // ПЛЮС
             numStorage.argNum1 = numStorage.argNum1 + numStorage.argNum2;
             id.plus = "";
-        } else if (id.multiply == 1) {
+        } else if (id.minus == 1) { // МИНУС
+            numStorage.argNum1 = numStorage.argNum1 - numStorage.argNum2;
+            id.minus = "";
+        } else if (id.multiply == 1) { // УМНОЖЕНИЕ
             numStorage.argNum1 = numStorage.argNum1 * numStorage.argNum2;
             id.multiply = "";
+        } else if (id.devide == 1) { // ДЕЛЕНИЕ
+            numStorage.argNum1 = numStorage.argNum1 / numStorage.argNum2;
+            id.devide = "";
         }
         numStorage.arg2 = [];
     } else {
-        section[0].removeEventListener("click", argument1);
-        section[0].addEventListener("click", argument2);
+        section.removeEventListener("click", argument1);
+        section.addEventListener("click", argument2);
     }
 }
 
@@ -114,33 +102,57 @@ function operations (e) {
             id.plus = 1;
         }
 
+        // Минус
+        if (btn.classList.contains("minus")) {
+            multiOperations();
+            id.minus = 1;
+        }
+
         // Умножение
         if (btn.classList.contains("multiply")) {
             multiOperations();
             id.multiply = 1;
         }
 
+        // Деление
+        if (btn.classList.contains("devide")) {
+            multiOperations();
+            id.devide = 1;
+        }
+
         // Равно
         if (btn.classList.contains("equate")) {
 
             // Плюс
-            if (id.plus !="") { // Проверяем айди оператора (был ли он выполнен)
+            if (id.plus == 1) { // Проверяем айди оператора (был ли он выполнен)
                 results.plus = numStorage.argNum1 + numStorage.argNum2;
                 answerScreen.textContent = `${results.plus}`;
             }
 
+            // Минус
+            if (id.minus == 1) { 
+                results.minus = numStorage.argNum1 - numStorage.argNum2;
+                answerScreen.textContent = `${results.minus}`;
+            }
+
             // Умножение
-            if (id.multiply !="") { 
+            if (id.multiply == 1) { 
                 results.multiply = numStorage.argNum1 * numStorage.argNum2;
                 answerScreen.textContent = `${results.multiply}`;
+            }
+
+            // Деление
+            if (id.devide == 1) { 
+                results.devide = numStorage.argNum1 / numStorage.argNum2;
+                answerScreen.textContent = `${results.devide}`;
             }
         }
     }
 }
 
 // Делигируем события на секции с кнопками
-section[0].addEventListener("click", argument1);
-section[1].addEventListener("click", operations);
+section.addEventListener("click", argument1);
+section.addEventListener("click", operations);
 
 
 
