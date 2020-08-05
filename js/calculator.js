@@ -14,15 +14,6 @@ let numStorage = {
     argNum2: ""
 };
 
-// Объект для хранения результатов действий операторов
-let results = {
-    plus: "",
-    minus: "",
-    multiply: "",
-    devide: "",
-    percent: ""
-};
-
 // Тут равно проверяет какой был выполнен оператор
 let id = {
     plus: "",
@@ -32,6 +23,11 @@ let id = {
     percent: ""
 };
 
+// Отрицательные / положительные значения
+let position = {
+    positive: "",
+    negative: ""
+};
 
 // Формируем первое число до оператора (аргумент1)
 function argument1 (e) {
@@ -45,6 +41,41 @@ function argument1 (e) {
                 numStorage.argNum1 = Number(numStorage.arg1.join(""));
                 answerScreen.textContent = `${numStorage.argNum1}`;
             } 
+        }
+        // Запятая / разделитель целых чисел
+        if (btn.classList.contains("comma")) {
+            if (numStorage.argNum1 == "") {
+                numStorage.arg1.push("0.");
+            } else {
+                numStorage.arg1.push(".");
+            }
+            numStorage.argNum1 = numStorage.arg1.join("");
+            answerScreen.textContent = `${numStorage.argNum1}`;
+        }
+
+        // Очищаем минус при каждом назначении аргумента, чтобы сразу включался минус, а не плюс
+        for (let key in position) {
+            position[key] = "";
+        }
+        // Делаем число отрицательным / положительным ПОСЛЕ РАВНО МИНУС НЕ РАБОТАЕТ!
+        if (btn.classList.contains("negative")) {
+            if (position.negative == "") {
+                numStorage.arg1.unshift("-");
+                numStorage.argNum1 = Number(numStorage.arg1.join(""));
+                answerScreen.textContent = `${numStorage.argNum1}`;
+                position.positive = "";
+                position.negative = 1;
+            } else {
+                numStorage.argNum1 = Number(numStorage.arg1.join(""));
+                answerScreen.textContent = `${numStorage.argNum1}`;
+                position.positive = 1;
+                position.negative = "";
+            }
+        }
+
+        // Меняем кнопку АС на С, при написании цифр
+        if (numStorage.argNum1 != "") {
+            section.querySelector(".ac").textContent = "C";
         }
     }
 } 
@@ -62,6 +93,34 @@ function argument2 (e) {
                 answerScreen.textContent = `${numStorage.argNum2}`;
             } 
         }
+
+        if (btn.classList.contains("comma")) {
+            if (numStorage.argNum2 == "") {
+                numStorage.arg2.push("0.");
+            } else {
+                numStorage.arg2.push(".");
+            }
+            numStorage.argNum2 = numStorage.arg2.join("");
+            answerScreen.textContent = `${numStorage.argNum2}`;
+        }
+
+        for (let key in position) {
+            position[key] = "";
+        }
+        if (btn.classList.contains("negative")) {
+            if (position.negative == "") {
+                numStorage.arg2.unshift("-");
+                numStorage.argNum2 = Number(numStorage.arg2.join(""));
+                answerScreen.textContent = `${numStorage.argNum2}`;
+                position.positive = "";
+                position.negative = 1;
+            } else {
+                numStorage.argNum2 = Number(numStorage.arg2.join(""));
+                answerScreen.textContent = `${numStorage.argNum2}`;
+                position.positive = 1;
+                position.negative = "";
+            }
+        }
     }
 }
 
@@ -73,6 +132,7 @@ function removeWhite () {
         }
     });
 }
+
 
 // Реализация цекочки из сразу нескольких разных операций 
 function multiOperations () {
@@ -118,48 +178,47 @@ function operations (e) {
             multiOperations();
         }
 
-        // Добавляем айди, после нажатия оператора: Плюс
-        if (btn.classList.contains("plus")) {
-            id.plus = 1;
-        }
-        // Минус
-        if (btn.classList.contains("minus")) {
-            id.minus = 1;
-        }
-        // Умножение
-        if (btn.classList.contains("multiply")) {   
-            id.multiply = 1;
-        }
-        // Деление
-        if (btn.classList.contains("devide")) {
-            id.devide = 1;
+        // Динамически добавляем айди, после нажатия операторов: +-*/
+        for (let key in id) {
+            if (btn.classList.contains(`${key}`)) {
+                id[key] = 1;
+            }
         }
 
+        
         // Равно
         if (btn.classList.contains("equate")) {
 
             // Плюс
             if (id.plus == 1) { // Проверяем айди оператора (был ли он выполнен)
-                results.plus = numStorage.argNum1 + numStorage.argNum2;
-                answerScreen.textContent = `${results.plus}`;
+                numStorage.argNum1 = numStorage.argNum1 + numStorage.argNum2;
+                numStorage.arg2 = [];
+                numStorage.argNum2 = "";
+                answerScreen.textContent = `${numStorage.argNum1}`;
             }
 
             // Минус
             if (id.minus == 1) { 
-                results.minus = numStorage.argNum1 - numStorage.argNum2;
-                answerScreen.textContent = `${results.minus}`;
+                numStorage.argNum1 = numStorage.argNum1 - numStorage.argNum2;
+                numStorage.arg2 = [];
+                numStorage.argNum2 = "";
+                answerScreen.textContent = `${numStorage.argNum1}`;
             }
 
             // Умножение
             if (id.multiply == 1) {
-                results.multiply = numStorage.argNum1 * numStorage.argNum2;
-                answerScreen.textContent = `${results.multiply}`;
+                numStorage.argNum1 = numStorage.argNum1 * numStorage.argNum2;
+                numStorage.arg2 = [];
+                numStorage.argNum2 = "";
+                answerScreen.textContent = `${numStorage.argNum1}`;
             }
 
             // Деление
             if (id.devide == 1) {
-                results.devide = numStorage.argNum1 / numStorage.argNum2;
-                answerScreen.textContent = `${results.devide}`;
+                numStorage.argNum1 = numStorage.argNum1 / numStorage.argNum2;
+                numStorage.arg2 = [];
+                numStorage.argNum2 = "";
+                answerScreen.textContent = `${numStorage.argNum1}`;
             }
         }
 
@@ -171,14 +230,20 @@ function operations (e) {
             numStorage.argNum1 = "";
             numStorage.argNum2 = "";
 
-            for (let key in results) {
-                results[key] = "";
-            }
             for (let key in id) {
                 id[key] = "";
             }
+            for (let key in position) {
+                position[key] = "";
+            }
 
             answerScreen.textContent = 0;
+
+            // Меняем кнопку С на АС обратно
+            if (numStorage.argNum1 == "") {
+                btn.textContent = "AC";
+            }
+
             // Отключаем второй
             section.removeEventListener("click", argument2);
             // Заново добавляем Первый аргумент
