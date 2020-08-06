@@ -23,11 +23,6 @@ let id = {
     percent: ""
 };
 
-// Отрицательные / положительные значения
-let position = {
-    positive: "",
-    negative: ""
-};
 
 // Формируем первое число до оператора (аргумент1)
 function argument1 (e) {
@@ -53,24 +48,23 @@ function argument1 (e) {
             answerScreen.textContent = `${numStorage.argNum1}`;
         }
 
-        // Очищаем минус при каждом назначении аргумента, чтобы сразу включался минус, а не плюс
-        for (let key in position) {
-            position[key] = "";
-        }
-        // Делаем число отрицательным / положительным ПОСЛЕ РАВНО МИНУС НЕ РАБОТАЕТ!
+        // Делаем число отрицательным / положительным 
         if (btn.classList.contains("negative")) {
-            if (position.negative == "") {
+            if (numStorage.argNum1 > 0) {
                 numStorage.arg1.unshift("-");
                 numStorage.argNum1 = Number(numStorage.arg1.join(""));
                 answerScreen.textContent = `${numStorage.argNum1}`;
-                position.positive = "";
-                position.negative = 1;
             } else {
+                numStorage.arg1.shift();
                 numStorage.argNum1 = Number(numStorage.arg1.join(""));
                 answerScreen.textContent = `${numStorage.argNum1}`;
-                position.positive = 1;
-                position.negative = "";
             }
+        }
+
+        // Проценты 
+        if (btn.classList.contains("percent")) {
+            numStorage.argNum1 = numStorage.argNum1 / 100;
+            answerScreen.textContent = `${numStorage.argNum1}`;
         }
 
         // Меняем кнопку АС на С, при написании цифр
@@ -104,21 +98,38 @@ function argument2 (e) {
             answerScreen.textContent = `${numStorage.argNum2}`;
         }
 
-        for (let key in position) {
-            position[key] = "";
-        }
         if (btn.classList.contains("negative")) {
-            if (position.negative == "") {
+            if (numStorage.argNum2 > 0) {
                 numStorage.arg2.unshift("-");
                 numStorage.argNum2 = Number(numStorage.arg2.join(""));
                 answerScreen.textContent = `${numStorage.argNum2}`;
-                position.positive = "";
-                position.negative = 1;
             } else {
+                numStorage.arg2.shift();
                 numStorage.argNum2 = Number(numStorage.arg2.join(""));
                 answerScreen.textContent = `${numStorage.argNum2}`;
-                position.positive = 1;
-                position.negative = "";
+            }
+            if (numStorage.argNum2 == 0) { // После Равно, когда арг2 = 0
+                if (numStorage.argNum1 > 0) {
+                    numStorage.arg1 = String(numStorage.argNum1).split(); 
+                    numStorage.arg1.unshift("-");
+                    numStorage.argNum1 = Number(numStorage.arg1.join(""));
+                    answerScreen.textContent = `${numStorage.argNum1}`;
+                } else {
+                    numStorage.arg1 = String(numStorage.argNum1).split("-");
+                    numStorage.arg1.shift();
+                    numStorage.argNum1 = Number(numStorage.arg1.join(""));
+                    answerScreen.textContent = `${numStorage.argNum1}`;
+                }
+            }
+        }
+
+        if (btn.classList.contains("percent")) {
+            // Вычисляем процент от предыдущего числа 
+            numStorage.argNum2 = numStorage.argNum1 * numStorage.argNum2 / 100;
+            answerScreen.textContent = `${numStorage.argNum2}`;
+            if (numStorage.argNum2 == 0) {
+                numStorage.argNum1 = numStorage.argNum1 / 100;
+                answerScreen.textContent = `${numStorage.argNum1}`;
             }
         }
     }
@@ -188,7 +199,6 @@ function operations (e) {
         
         // Равно
         if (btn.classList.contains("equate")) {
-
             // Плюс
             if (id.plus == 1) { // Проверяем айди оператора (был ли он выполнен)
                 numStorage.argNum1 = numStorage.argNum1 + numStorage.argNum2;
@@ -232,9 +242,6 @@ function operations (e) {
 
             for (let key in id) {
                 id[key] = "";
-            }
-            for (let key in position) {
-                position[key] = "";
             }
 
             answerScreen.textContent = 0;
