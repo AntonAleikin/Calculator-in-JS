@@ -23,16 +23,23 @@ $orange_color: #FF9500
         min-height: 150px
         color: $white_color
         +flex_center
-        font-weight: bold
+        font-size: 20px
+        // Адаптация Extra-Large
+        @media (min-width: 1200px) 
+            font-size: 30px
+        // Адаптация Large
+        @media (min-width: 992px)
+            font-size: 30px
 
     .section
         padding-right: 20px
         width: 100%
 
         .section_item
-            width: 50px
-            height: 50px
-            margin-bottom: 7px
+            width: 70px
+            height: 70px
+            margin-bottom: 10px
+            font-size: 20px
             +flex_center
             color: $white_color
             background-color: $grey_color
@@ -41,13 +48,47 @@ $orange_color: #FF9500
             &:active
                 background-color: rgba(212, 212, 210, 0.7)
                 transition: all 0.3s ease-out 
+            // Адаптация Small
+            @media (min-width: 440px) and (max-width: 576px)
+                width: 90px
+                height: 90px
+            // Адаптация Large
+            @media (min-width: 992px)
+                width: 80px
+                height: 80px
+                font-size: 30px
+            // Адаптация Extra-Large
+            @media (min-width: 1200px)
+                width: 90px
+                height: 90px
+                margin-bottom: 12px
+                font-size: 30px
+            
         .num_0
-            width: 100px
-            height: 50px
-            border-radius: 25px
+            width: 140px
+            height: 70px
+            border-radius: 35px
             padding-left: 25px
             display: flex
             justify-content: start
+            // Адаптация Small
+            @media (min-width: 440px) and (max-width: 576px)
+                width: 180px
+                height: 90px
+                border-radius: 45px   
+            // Адаптация Large
+            @media (min-width: 992px)
+                width: 160px
+                height: 80px
+                border-radius: 45px
+                font-size: 30px
+            // Адаптация Extra-Large
+            @media (min-width: 1200px)
+                width: 190px
+                height: 90px
+                border-radius: 55px
+                font-size: 30px
+                
 
         .light_grey
             color: $background
@@ -65,4 +106,5 @@ $orange_color: #FF9500
             background-color: rgba(255, 255, 255, 1)
             transition: all 0.3s ease-out
 
+     
             
